@@ -3,10 +3,9 @@
 void print_buffer(char buffer[], int *buff_ind);
 
 /*
- * _printf - Custom printf function.
- * This function mimics the standard printf function.
- * @format: The format string.
- * Return: Number of printed characters.
+ * _printf - Custom printf function
+ * @format: Format string for printing.
+ * Returns: Number of characters printed.
  */
 int _printf(const char *format, ...)
 {
@@ -20,12 +19,12 @@ int _printf(const char *format, ...)
 
 	va_start(list, format);
 
-	for (i = 0; format[i] != '\0'; i++)
+	for (i = 0; format && format[i] != '\0'; i++)
 	{
 		if (format[i] != '%')
 		{
 			buffer[buff_ind++] = format[i];
-			if (buff_ind >= BUFF_SIZE - 1)
+			if (buff_ind == BUFF_SIZE)
 				print_buffer(buffer, &buff_ind);
 			printed_chars++;
 		}
@@ -40,26 +39,22 @@ int _printf(const char *format, ...)
 			printed = handle_print(format, &i, list, buffer,
 				flags, width, precision, size);
 			if (printed == -1)
-			{
-				va_end(list);
 				return (-1);
-			}
 			printed_chars += printed;
 		}
 	}
 
 	print_buffer(buffer, &buff_ind);
+
 	va_end(list);
 
 	return (printed_chars);
 }
 
 /*
- * print_buffer - Prints the contents of the buffer.
- * This function is responsible for printing the current contents
- * of the buffer and resetting the buffer index.
- * @buffer: Array of characters to be printed.
- * @buff_ind: Index at which to add next char, represents the buffer length.
+ * print_buffer - Prints the buffer's contents.
+ * @buffer: Character array (buffer) to print.
+ * @buff_ind: Current index in buffer, indicates next character position.
  */
 void print_buffer(char buffer[], int *buff_ind)
 {
