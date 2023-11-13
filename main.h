@@ -14,4 +14,7 @@ int _printf(const char *format, ...);
 int handle_char(va_list args);
 int handle_string(va_list args);
 
+/* Prototype for print_string helper function */
+int print_string(char *str);
+
 #endif /* MAIN_H */
