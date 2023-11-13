@@ -1,66 +1,113 @@
-#include "main.h"
-
-void print_buffer(char buffer[], int *buff_ind);
+#include <stdarg.h>
+#include <unistd.h>
 
 /**
- * _printf - Printf function
- * @format: format.
- * Return: Printed chars.
+ * print_char - Prints a character
+ * @c: Character to print
+ * Return: Number of characters printed
  */
-int _printf(const char *format, ...)
+int print_char(char c)
 {
-	int i, printed = 0, printed_chars = 0;
-	int flags, width, precision, size, buff_ind = 0;
-	va_list list;
-	char buffer[BUFF_SIZE];
-
-	if (format == NULL)
-		return (-1);
-
-	va_start(list, format);
-
-	for (i = 0; format && format[i] != '\0'; i++)
-	{
-		if (format[i] != '%')
-		{
-			buffer[buff_ind++] = format[i];
-			if (buff_ind == BUFF_SIZE)
-				print_buffer(buffer, &buff_ind);
-			/* write(1, &format[i], 1);*/
-			printed_chars++;
-		}
-		else
-		{
-			print_buffer(buffer, &buff_ind);
-			flags = get_flags(format, &i);
-			width = get_width(format, &i, list);
-			precision = get_precision(format, &i, list);
-			size = get_size(format, &i);
-			++i;
-			printed = handle_print(format, &i, list, buffer,
-				flags, width, precision, size);
-			if (printed == -1)
-				return (-1);
-			printed_chars += printed;
-		}
-	}
-
-	print_buffer(buffer, &buff_ind);
-
-	va_end(list);
-
-	return (printed_chars);
+	return (write(1, &c, 1));
 }
 
 /**
- * print_buffer - Prints the contents of the buffer if it exist
- * @buffer: Array of chars
- * @buff_ind: Index at which to add next char, represents the length.
+ * print_string - Prints a string
+ * @str: String to print
+ * Return: Number of characters printed
  */
-void print_buffer(char buffer[], int *buff_ind)
+int print_string(char *str)
 {
-	if (*buff_ind > 0)
-		write(1, &buffer[0], *buff_ind);
+	int count = 0;
+	int i;	/* Declare loop variable outside the for loop */
 
-	*buff_ind = 0;
+	if (!str)
+		str = "(null)";
+	for (i = 0; str[i] != '\0'; i++)
+		count += print_char(str[i]);
+	return (count);
+}
+
+/**
+ * print_int - Prints an integer
+ * @n: Integer to print
+ * Return: Number of characters printed
+ */
+int print_int(int n)
+{
+	int count = 0;
+
+	if (n < 0)
+	{
+		count += print_char('-');
+		n = -n;
+	}
+	if (n / 10)
+		count += print_int(n / 10);
+	count += print_char((n % 10) + '0');
+	return (count);
+}
+
+/**
+ * print_unsigned - Prints an unsigned integer
+ * @n: Unsigned integer to print
+ * Return: Number of characters printed
+ */
+int print_unsigned(unsigned int n)
+{
+	int count = 0;
+
+	if (n / 10)
+		count += print_unsigned(n / 10);
+	count += print_char((n % 10) + '0');
+	return (count);
+}
+
+/**
+ * _printf - Custom printf function
+ * @format: Format string
+ * Return: Number of characters printed
+ */
+int _printf(const char *format, ...)
+{
+	va_list args;
+	int count = 0;
+	int i;	/* Declare loop variable outside the for loop */
+
+	va_start(args, format);
+	for (i = 0; format && format[i] != '\0'; i++)
+	{
+		if (format[i] == '%')
+		{
+			i++;
+			switch (format[i])
+			{
+				case 'c':
+					count += print_char(va_arg(args, int));
+					break;
+				case 's':
+					count += print_string(va_arg(args, char*));
+					break;
+				case '%':
+					count += print_char('%');
+					break;
+				case 'd':
+				case 'i':
+					count += print_int(va_arg(args, int));
+					break;
+				case 'u':
+					count += print_unsigned(va_arg(args, unsigned int));
+					break;
+				default:
+					count += print_char('%');
+					count += print_char(format[i]);
+					break;
+			}
+		}
+		else
+			count += print_char(format[i]);
+	}
+	va_end(args);
+
+	return (count);
 }
