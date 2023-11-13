@@ -46,8 +46,10 @@ int _printf(const char *format, ...)
 					count += _putchar('%');
 					break;
 				default:
+					/* Print unknown format specifier as a literal */
 					count += _putchar('%');
 					count += _putchar(format[i]);
+					break;
 			}
 		}
 		else
