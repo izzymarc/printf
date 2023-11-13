@@ -4,9 +4,14 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-/* Prototype for your _printf function */
+/* Prototype for the _putchar function */
+int _putchar(char c);
+
+/* Prototype for the _printf function */
 int _printf(const char *format, ...);
 
-/* You can add more function prototypes here as your project grows. */
+/* Prototypes for helper functions used by _printf */
+int handle_char(va_list args);
+int handle_string(va_list args);
 
 #endif /* MAIN_H */

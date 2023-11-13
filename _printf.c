@@ -64,7 +64,7 @@ int _printf(const char *format, ...)
  *
  * Return: Number of characters printed
  */
-static int handle_char(va_list args)
+int handle_char(va_list args)
 {
 	return (_putchar(va_arg(args, int)));
 }
@@ -75,7 +75,7 @@ static int handle_char(va_list args)
  *
  * Return: Number of characters printed
  */
-static int handle_string(va_list args)
+int handle_string(va_list args)
 {
 	char *str = va_arg(args, char *);
 	int count = 0, j;
