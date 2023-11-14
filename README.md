@@ -30,7 +30,7 @@ To get started with CustomPrintf, follow these steps:
 
 ## Usage
 
-To use CustomPrintf, include the `custom_printf.h` header file in your C program. This header provides access to the extended `custom_printf` function.
+To use the CustomPrintf, include the `custom_printf.h` header file in your C program. This header provides access to the extended `custom_printf` function.
 
 ```c
 #include "custom_printf.h"
