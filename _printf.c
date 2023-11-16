@@ -1,5 +1,4 @@
 #include "main.h"
-#include "alphaPrintRoutines.c"
 
 void print_buffer(char buffer[], int *buff_ind);
 
@@ -33,12 +32,12 @@ int _printf(const char *format, ...)
 		else
 		{
 			print_buffer(buffer, &buff_ind);
-			flags = flagInterpreter(format, &i);
-			width = breadthAnalyser(format, &i, list);
-			precision = preciseCalcModule(format, &i, list);
-			size = sizeDecipherUnit(format, &i);
+			flags = get_flags(format, &i);
+			width = get_width(format, &i, list);
+			precision = get_precision(format, &i, list);
+			size = get_size(format, &i);
 			++i;
-			printed = printOrchestrator(format, &i, list, buffer,
+			printed = handle_print(format, &i, list, buffer,
 				flags, width, precision, size);
 			if (printed == -1)
 				return (-1);
@@ -54,14 +53,14 @@ int _printf(const char *format, ...)
 }
 
 /**
- * print_buffer - Prints the contents of the buffer if it exists
+ * print_buffer - Prints the contents of the buffer if it exist
  * @buffer: Array of chars
  * @buff_ind: Index at which to add next char, represents the length.
  */
 void print_buffer(char buffer[], int *buff_ind)
 {
 	if (*buff_ind > 0)
-		outputConductor(buffer, *buff_ind);
+		write(1, &buffer[0], *buff_ind);
 
 	*buff_ind = 0;
 }
