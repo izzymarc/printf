@@ -1,41 +1,45 @@
-#include "main.h"
-
-/**
- * get_precision - Calculates the precision for printing
- * @format: Formatted string in which to print the arguments
- * @i: List of arguments to be printed.
- * @list: list of arguments.
+/*
+ * preciseCalcModule - Calculates the precision for printing.
  *
- * Return: Precision.
+ * This function calculates the precision for printing based on the provided
+ * format, index, and variable argument list.
+ *
+ * @format: Formatted string in which to print the arguments.
+ * @i: Index of the argument in the format string.
+ * @list: Variable argument list.
+ *
+ * Return: Precision value.
  */
-int get_precision(const char *format, int *i, va_list list)
+int preciseCalcModule(const char *format, int *i, va_list list)
 {
-	int curr_i = *i + 1;
-	int precision = -1;
+    int curr_i = *i + 1;
+    int precision = -1;
 
-	if (format[curr_i] != '.')
-		return (precision);
+    if (format[curr_i] != '.')
+        return (precision);
 
-	precision = 0;
+    precision = 0;
 
-	for (curr_i += 1; format[curr_i] != '\0'; curr_i++)
-	{
-		if (is_digit(format[curr_i]))
-		{
-			precision *= 10;
-			precision += format[curr_i] - '0';
-		}
-		else if (format[curr_i] == '*')
-		{
-			curr_i++;
-			precision = va_arg(list, int);
-			break;
-		}
-		else
-			break;
-	}
+    for (curr_i += 1; format[curr_i] != '\0'; curr_i++)
+    {
+        if (is_digit(format[curr_i]))
+        {
+            precision *= 10;
+            precision += format[curr_i] - '0';
+        }
+        else if (format[curr_i] == '*')
+        {
+            precision = va_arg(list, int);
+            break;
+        }
+        else
+            break;
+    }
 
-	*i = curr_i - 1;
+    /* Check if precision is negative, if yes, treat it as 0 */
+    precision = (precision < 0) ? 0 : precision;
 
-	return (precision);
+    *i = curr_i - 1;
+
+    return (precision);
 }
