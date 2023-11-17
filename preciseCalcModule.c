@@ -1,10 +1,10 @@
 #include "main.h"
 
-/**
+/*
  * preciseCalcModule - Calculates the precision for printing
  * @format: Formatted string in which to print the arguments
  * @i: List of arguments to be printed.
- * @list: list of arguments.
+ * @list: List of arguments.
  *
  * Return: Precision.
  */
@@ -34,6 +34,9 @@ int preciseCalcModule(const char *format, int *i, va_list list)
 		else
 			break;
 	}
+
+	/* Check if precision is negative, if yes, treat it as 0 */
+	precision = (precision < 0) ? 0 : precision;
 
 	*i = curr_i - 1;
 
