@@ -38,7 +38,7 @@ int _printf(const char *format, ...)
 			size = sizeDecipherUnit(format, &i);
 			++i;
 			printed = printOrchestrator(format, &i, list, buffer,
-				flags, width, precision, size);
+										flags, width, precision, size);
 			if (printed == -1)
 				return (-1);
 			printed_chars += printed;
@@ -60,7 +60,7 @@ int _printf(const char *format, ...)
 void print_buffer(char buffer[], int *buff_ind)
 {
 	if (*buff_ind > 0)
-		outputConductor(buffer, *buff_ind);
+		write(1, &buffer[0], *buff_ind);
 
 	*buff_ind = 0;
 }
